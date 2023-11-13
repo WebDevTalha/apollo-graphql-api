@@ -18,7 +18,7 @@ const typeDefs = `#graphql
      }
 
      type Author {
-          id: ID
+          id: ID!
           name: String
           novelID: String
      }
@@ -31,6 +31,15 @@ const resolvers = {
     Query: {
         novels: async (parent: any, args: any, context: Context) => {
             return await context.prisma.novel.findMany()
+        },
+    },
+    Novel: {
+        authors: async (parent: any, args: any, context: Context) => {
+            return await context.prisma.author.findMany({
+                where: {
+                    novelId: parent.id,
+                },
+            })
         },
     },
 }
